@@ -3,16 +3,8 @@
 
 ⟨ReadWav, WriteWav, ReadWav_set, ReadWav_coerce⟩⇐
 
-o ← options ⇐ {
-  FBytes ⇐ •FBytes
-  fmt  ⇐ 1‿16      # Format: 16-bit integer
-  freq ⇐ 44100     # Frequency: 44.1kHz
-  warn_dither ⇐ 0  # Whether to warn on non-integer signal
-  warn_clip   ⇐ 1  # Whether to warn on out-of-bounds signal
-  Dither ⇐ ⌊ (0.5 + 0 -˝∘(•RAND∘⥊)˜ (2∾≢))⊸+
-  Resample ⇐ "No resampling function specified"!0˙
-  Set ⇐ {fmt‿freq↩𝕩}
-}
+"wav.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
+o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
 
 # The output from ReadWav, or input to WriteWav, is either:
 # - A list of:
