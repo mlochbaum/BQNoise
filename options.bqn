@@ -6,5 +6,5 @@ Set ⇐ {fmt‿freq↩𝕩}
 # For reading/writing wave files
 warn_dither ⇐ 0  # Whether to warn on non-integer signal
 warn_clip   ⇐ 1  # Whether to warn on out-of-bounds signal
-Dither ⇐ ⌊ (0.5 + 0 -˝∘(•RAND∘⥊)˜ (2∾≢))⊸+
+Dither ⇐ ⌊ (-˝ 0 •RAND∘⥊˜ 2∾≢)⊸+
 Resample ⇐ "No resampling function specified"!0˙
