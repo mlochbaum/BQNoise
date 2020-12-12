@@ -30,3 +30,9 @@ Brown ⇐ +` White              # Brown noise
 # Pink noise
 #Pink  ⇐ ÷⟜(⌈´|) (2⊸/⊸+˜´∘⌽ · Rand¨ 2⋆↕)⊸÷∘(1+·⌈2⋆⁼⊢)⊸(↑˜)∘≠
 Pink  ⇐ ÷⟜(⌈´|) (+` ·⥊∘⍉∘≍´ ·-⟜«∘Rand¨ 2⋆1⌈⌽∘↕)∘(1+·⌈2⋆⁼⊢)⊸(↑˜)∘≠
+
+# Karplus-Stong algorithm for a plucked string
+Pluck ⇐ { 𝕊 f‿len‿att: # Frequency, length, attenuation
+  p ← ⌊o.freq÷f
+  ∾ ((÷2×16⋆att÷p)×1⊸⌽⊸+)⍟(↕⌈len÷p) Pink p⥊0
+}
