@@ -1,12 +1,12 @@
 # Functions to read to and write from wave files.
 # Does not support many kinds of wave files, such as compressed data.
 
-⟨ReadWav, WriteWav, ReadWav_set, ReadWav_coerce⟩⇐
+⟨Read, Write, Read_set, Read_coerce⟩⇐
 
 "wav.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
 
-# The output from ReadWav, or input to WriteWav, is either:
+# The output from Read, or input to Write, is either:
 # - A list of:
 #     The sample rate (in Hz)
 #     The PCM format (see below)
@@ -14,8 +14,8 @@ o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
 # - The PCM data only
 #   (options.freq and options.fmt are used for rate and format)
 # 
-# ReadWav returns the plain PCM data if the settings matched the
-# options while ReadWav_set and ReadWav_coerce always return the
+# Read returns the plain PCM data if the settings matched the
+# options while Read_set and Read_coerce always return the
 # plain data.
 
 # A PCM format consists of the type of audio and the bit depth.
@@ -110,7 +110,7 @@ ForceFormat ← { f‿b 𝕊 pcm:
   (Clip⍟(min⊸> ∨○(∨´⥊) >⟜max) Dither∘⊣⍟≢⟜⌊)⍟(f=1) pcm
 }
 
-DecodeWav ← {
+Decode ← {
   If ← {𝕏⍟𝕎@}´
   While ← {𝕨{𝕊∘𝔾⍟𝔽𝕩}𝕩@}´
   # Integer from little-endian unsigned bytes
@@ -148,7 +148,7 @@ DecodeWav ← {
   ⟨sampleRate, fmt, ⍉ ⌊‿numChannels ⥊ Cvt⎊(⊣⊘Cvt subchunk2Size⊸↑) dat⟩
 }
 
-EncodeWav ← { rate‿fmt‿pcm:
+Encode ← { rate‿fmt‿pcm:
   ! 2 ≥ =pcm
   pcm ⥊⟜0⊸↓˜↩ 2
   dat ← fmt _audioConvert⁼ fmt ForceFormat ⥊⍉pcm
@@ -167,12 +167,12 @@ EncodeWav ← { rate‿fmt‿pcm:
   hdr ∾ dat
 }
 
-GetWav ← DecodeWav∘{ o.FBytes 𝕩 }
-ReadWav  ← { ¯1⊸⊑⍟(⟨o.freq,o.fmt⟩ ≡ 2⊸↑) GetWav 𝕩 }
-WriteWav ← { 𝕩 o.FBytes EncodeWav(⟨o.freq,o.fmt⟩∾<)⍟(1≥≡) 𝕨 }
+ReadFull ← Decode∘{ o.FBytes 𝕩 }
+Read  ← { ¯1⊸⊑⍟(⟨o.freq,o.fmt⟩ ≡ 2⊸↑) ReadFull 𝕩 }
+Write ← { 𝕩 o.FBytes Encode(⟨o.freq,o.fmt⟩∾<)⍟(1≥≡) 𝕨 }
 
 # Read, setting o.freq and o.fmt as a side effect.
-ReadWav_set ← { t←GetWav 𝕩 ⋄ o.Set ¯1↓t ⋄ ¯1⊑t }
+Read_set ← { t←ReadFull 𝕩 ⋄ o.Set ¯1↓t ⋄ ¯1⊑t }
 
 # Read, resampling to fit current frequency, using options.Resample
-ReadWav_coerce ← { ((o.freq∾˜0⊸⊑) o.Resample ¯1⊸⊑) GetWav 𝕩 }
+Read_coerce ← { ((o.freq∾˜0⊸⊑) o.Resample ¯1⊸⊑) ReadFull 𝕩 }
