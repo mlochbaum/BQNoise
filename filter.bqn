@@ -66,7 +66,7 @@ Hp1 ← ((-⊸≍ ≍○< ⥊) 1÷∘+Om) _f
 # 2-pole *-pass
 f2types ← "bw"‿"cd"‿"bessel"
 Filter2 ← { type‿nPasses‿isHighpass:
-  t ← f2types ⊑∘⊐ <type
+  t ← f2types⊸⊐⌾< type
   ! 3 > t
   c ← t◶⟨4√-⟜1 , √1-˜√ , √3×0.5-˜·√-⟜0.75⟩ nPasses√2 # cutoff frequency correction
   x ← t ⊑ ⟨√2‿1 , 2‿1 , 3‿3⟩                         # p and g
