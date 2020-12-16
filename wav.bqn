@@ -64,11 +64,32 @@ _audioConvert ← {
   "Bits per sample cannot exceed 64" ! bitsPerSample ≤ 64
   l ← bitsPerSample÷8
   _withInv_ ← {F _𝕣_ G: {𝕊:F𝕩 ; 𝕊⁼:G𝕩}}
+  # Convert 𝕗-byte sequences to ints
+  _int ← {
+    b ← 256 ⋄ (+⟜(b⊸×)˝∘⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘>b|⌊∘÷⟜b⍟(↕𝕗))
+  }
+  # Convert int to float
+  _float ← {e‿m‿b←𝕗  # exponent and mantissa length in bits; bias
+    maxval←(1-2⋆-m+1)×2⋆(2⋆e)-b+1
+    {
+      𝕩 ×↩ 2⋆-m
+      p‿s ← (2⋆e) (| ≍○< ⌊∘÷˜) ⌊𝕩
+      p +↩ ¬n←0<p
+      (¯1⋆s)×(2⋆p-b) × n+1|𝕩
+    }_withInv_{
+      s←𝕩<0 ⋄ 𝕩↩maxval⌊|𝕩
+      p←0⌈b+⌊2⋆⁼𝕩 ⋄ h←p+s×2⋆e
+      p +↩ ¬n←0<p
+      ⌊0.5 + (2⋆m) × h + n-˜𝕩×2⋆b-p
+    }
+  }
+  # Look up the appropriate function
   {
   1:
-    b←256
-    (+⟜(b⊸×)˝∘⍉⌊‿l⥊⊢) _withInv_ (⥊∘⍉∘>b|⌊∘÷⟜b⍟(↕l)) -⟜@ ;
-#;3:floating-point
+    l _int -⟜@ ;
+  3:
+    "Float formats other than 32-bit are not supported" ! 4=l
+    8‿23‿127 _float ·4 _int -⟜@ ;
   𝕩:
     0 !˜ "Unsupported audio format: "∾⍕audioFormat
   }audioFormat
