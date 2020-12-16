@@ -172,7 +172,7 @@ ReadWav  ← { ¯1⊸⊑⍟(⟨o.freq,o.fmt⟩ ≡ 2⊸↑) GetWav 𝕩 }
 WriteWav ← { 𝕩 o.FBytes EncodeWav(⟨o.freq,o.fmt⟩∾<)⍟(1≥≡) 𝕨 }
 
 # Read, setting o.freq and o.fmt as a side effect.
-ReadWav_set ← { t←GetWav 𝕩 ⋄ Set ¯1↓t ⋄ ¯1⊑t }
+ReadWav_set ← { t←GetWav 𝕩 ⋄ o.Set ¯1↓t ⋄ ¯1⊑t }
 
 # Read, resampling to fit current frequency, using options.Resample
 ReadWav_coerce ← { ((o.freq∾˜0⊸⊑) o.Resample ¯1⊸⊑) GetWav 𝕩 }
