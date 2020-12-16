@@ -117,7 +117,7 @@ DecodeWav ← {
   }
   # Check that fields match their definitions
   e ← hdr ≢⟜(⊑{𝕎𝕩⊏hdr}1⊸↓)¨ wh.def
-  Msg ← "Values for fields " (∾∾⟜" "¨) "are incorrect"˙
+  Msg ← "Values for fields " ∾ (∾∾⟜" "¨) ∾ "are incorrect"˙
   _alert ← {(𝔽∘Msg /⟜(wh.name))⍟(∨´) e ∧ wh.err⊸∊}
   !⟜0 _alert "e"∾(se<0)/"?"
   (•Out "Warning: "∾⊢) _alert "w"
