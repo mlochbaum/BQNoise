@@ -37,13 +37,23 @@ o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
 # 𝕩 is the signal to filter
 # 𝕨 is ⟨result coefficients , 𝕩 coefficients⟩.
 Filter ← {
-  a‿b ← 0×coeff←𝕨  # accumulators and coefficients for input and result
-  {
-    a«˜↩𝕩
-    r←+´coeff+´∘×¨a‿b
-    b«˜↩r
-    r
-  }¨ 𝕩
+  ⟨i0⟩‿⟨o0⟩ 𝕊𝕩:
+    b0←a0←0
+    { b0↩(o0×b0)+i0×a0↩𝕩 }¨ 𝕩
+ ;⟨i0,i1⟩‿⟨o0⟩ 𝕊𝕩:
+    b0←a1←a0←0
+    { b0↩(o0×b0)+(i1×a1↩𝕩)+i0×a0↩a1 }¨ 𝕩
+ ;⟨i0,i1,i2⟩‿⟨o0,o1⟩ 𝕊𝕩:
+    b1←b0←a2←a1←a0←0
+    { b1↩(o1×b0↩b1)+(o0×b0)+(i2×a2↩𝕩)+(i1×a1↩a2)+i0×a0↩a1 }¨ 𝕩
+ ;coeff 𝕊𝕩:
+    a‿b ← 0×coeff  # accumulators for input and result
+    {
+      a«˜↩𝕩
+      r←+´coeff+´∘×¨a‿b
+      b«˜↩r
+      r
+    }¨ 𝕩
 }⎉1
 _f ← { !∘0⊘(𝔽⊸Filter) }
 
