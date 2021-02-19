@@ -32,6 +32,7 @@
 
 "filter.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
+Sin‿Cos‿Tan ← •math
 
 # Generalized filtering
 # 𝕩 is the signal to filter
@@ -59,12 +60,6 @@ _f ← { !∘0⊘(𝔽⊸Filter) }
 
 # Compute the frequency response from coefficients
 #Response ← ≍○<⟜(1∾-)○⌽´ ⊸ ((|·÷´{+⟜(𝕩⊸×)´𝕨}¨)⎉∞‿0) ⟜ (⋆0i1×Om)
-
-# Trig (approximations for now)
-SP ← (4⊸×÷5⊸-) 4×¬⊸×
-Sin ← (⊢-∘⊢⍟(>⟜1)·SP 1⊸|) 2|÷⟜π
-Cos ← Sin (π÷2)⊸-
-Tan ← Sin ÷ Cos
 
 Om ← (2×π)×{𝕩÷o.freq}
 Tom ← Tan Om÷2˙

@@ -2,9 +2,7 @@
 
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
 mix‿fil ← •Import¨ "mix.bqn"‿"filter.bqn"
-SP ← (4⊸×÷5⊸-) 4×¬⊸×
-Sin ← (⊢-∘⊢⍟(>⟜1)·SP 1⊸|) 2|÷⟜π
-Cos ← Sin (π÷2)⊸-
+⟨Cos⟩ ← •math
 
 # The goal of stereo panning is to make sounds appear to come from
 # different directions. A well-panned sound for music will have the
