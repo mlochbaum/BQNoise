@@ -16,7 +16,7 @@ Shift ⇐ <⟜0◶⟨↓⎉1 , (-⥊0˙)⊸(∾⎉1)⟩
 # Repeat signal 𝕩 𝕨 times.
 Rep ⇐ (⥊/⟜≍)⎉1
 # 𝕨 is location‿length. Obtain that part of signal 𝕩.
-Slice ⇐ (SliceI ← +⟜(0⊸⌊+↕∘|)´) ⊏⎉1 ⊢
+Slice ⇐ (SliceI ← +⟜(0⊸⌊+↕∘|)´)∘⊣ ⊏⎉1 ⊢
 # Apply 𝔽 to the slice of 𝕩 given by 𝕨.
 _onSlice ⇐ { 𝔽⌾((SliceI𝕨)⊏⎉1⊢) 𝕩 }
 
