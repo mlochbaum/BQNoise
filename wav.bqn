@@ -66,7 +66,8 @@ _audioConvert ← {
   _withInv_ ← {F _𝕣_ G: {𝕊:F𝕩 ; 𝕊⁼:G𝕩}}
   # Convert 𝕗-byte sequences to ints
   _int ← {
-    b ← 256 ⋄ (+⟜(b⊸×)˝∘⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘>b|⌊∘÷⟜b⍟(↕𝕗))
+    b ← 256
+    (+⟜(b⊸×)˝˜⟜(-(b÷2)≤¯1⊸⊏)·⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘>b|⌊∘÷⟜b⍟(↕𝕗))
   }
   # Convert int to float
   _float ← {e‿m‿b←𝕗  # exponent and mantissa length in bits; bias
