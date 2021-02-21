@@ -4,7 +4,7 @@ fft ← •Import "fft.bqn"
 
 # List of length |𝕩 that starts at 0 and stops just before 1,
 # reversed if 𝕩<0.
-I ⇐ <⟜0 ⌽∘⊢⍟⊣ ↕∘|⊸÷
+I ⇐ <⟜0 ⌽∘⊢⍟⊣ ↕⊸÷∘|
 
 # Add two signals 𝕨 and 𝕩 or a list of signals 𝕩,
 # extending to the length of the longest signal.
