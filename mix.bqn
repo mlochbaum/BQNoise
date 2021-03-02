@@ -9,8 +9,8 @@ I ⇐ <⟜0 ⌽∘⊢⍟⊣ ↕⊸÷∘|
 # Add two signals 𝕨 and 𝕩 or a list of signals 𝕩,
 # extending to the length of the longest signal.
 Add ⇐ +´ ·(⌈´(¯1⊑≢)¨)⊸(↑⎉1¨) ⊢⊘(≍○<)
-# Like add, but concatenate instead.
-Concat ⇐ (∾ ↓¨˜⟜(<0⥊˜·⌈´=¨)) ⊘ (∾⎉1)
+# Like add, but concatenate instead (no extension).
+Concat ⇐ (∾ (0⥊˜·⌈´=¨)⊸(<∘⊣↓¨↓)) ⊘ (∾⎉1)
 # Like ⌽⎉1, but the end of the signal does not wrap around.
 Shift ⇐ <⟜0◶⟨↓⎉1 , (-⥊0˙)⊸(∾⎉1)⟩
 # Repeat signal 𝕩 𝕨 times.
