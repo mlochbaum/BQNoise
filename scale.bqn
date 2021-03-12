@@ -10,3 +10,7 @@ Trans ⇐ (2 ⋆ ÷⟜12)⊸×
 # e.g. C#, A4, Gb2, F##
 Oct ← ⊑'4'-˜('0'⊸≤∧≤⟜'9')⊸/∾"3"˙  # Default to 3 to hit middle C
 Note ⇐ (minor⊑˜'a'(⊢-≤◶'A'‿⊣)⊑) (+´⟜(-˝"#b"=⌜⊢) Trans 440×2⋆Oct∘⊢) 1⊸↓
+
+# Nearest note from frequency
+names ← ('A'⊸+ ∾⟜(/⟜"#")¨ ⊒) /12⊸«⊸-minor
+FromFreq ⇐ 12 ((names⊑˜|) ∾ '4'+⌊∘÷˜) 0.5 ⌊∘+ Trans⟜440⁼
