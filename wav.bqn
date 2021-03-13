@@ -92,7 +92,7 @@ _audioConvert ← {
     "Float formats other than 32-bit are not supported" ! 4=l
     8‿23‿127 _float ·4 _int -⟜@ ;
   𝕩:
-    0 !˜ "Unsupported audio format: "∾⍕audioFormat
+    0 !˜ "Unsupported audio format: " ∾ 2•Pretty audioFormat
   }audioFormat
 }
 
@@ -121,7 +121,7 @@ Decode ← {
 
   # Assign field values to field names.
   hdr ↩ ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdr
-  ⍎(1↓∾"‿"⊸∾¨wh.name)∾"←hdr"
+  •Eval(1↓∾"‿"⊸∾¨wh.name)∾"←hdr"
   # Handle extensible format
   "subchunk1Size is invalid" ! 0‿2‿24 ∊˜ se←subchunk1Size-16
   If (se>0)‿{𝕤
