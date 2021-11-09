@@ -55,6 +55,9 @@ wh ← {
 
   # Then fill blank definitions with a self-reference
   def ↩ ↕∘≠⊸({⊑‿𝕨⍟(0=≠)𝕩}¨) def
+
+  # Turn list of values into namespace
+  makeNS ⇐ •BQN "{"∾(1↓∾"‿"⊸∾¨name)∾"←𝕩}"
 }
 
 # Return an undoable (⁼) function to convert bytes to PCM data.
@@ -92,7 +95,7 @@ _audioConvert ← {
     "Float formats other than 32-bit are not supported" ! 4=l
     8‿23‿127 _float ·4 _int -⟜@ ;
   𝕩:
-    0 !˜ "Unsupported audio format: " ∾ 2•Pretty audioFormat
+    0 !˜ "Unsupported audio format: " ∾ •Repr audioFormat
   }audioFormat
 }
 
@@ -121,7 +124,7 @@ Decode ← {
 
   # Assign field values to field names.
   hdr ↩ ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdr
-  •Eval(1↓∾"‿"⊸∾¨wh.name)∾"←hdr"
+  subchunk1Size‿subchunk2Size‿subchunk2ID‿audioFormat‿bitsPerSample‿sampleRate‿numChannels ← wh.MakeNS hdr
   # Handle extensible format
   "subchunk1Size is invalid" ! 0‿2‿24 ∊˜ se←subchunk1Size-16
   If (se>0)‿{𝕤
