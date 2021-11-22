@@ -7,7 +7,7 @@ SetFreq ⇐ {freq↩𝕩}
 
 # For generating random waveforms; result is a shape 𝕩 array of uniform
 # random numbers between 0 and 1
-RandFloats ⇐ •RAND∘⥊⟜0
+RandFloats ⇐ •rand.Range⟜0
 
 # For reading/writing wave files
 warn_dither ⇐ 0  # Whether to warn on non-integer signal
