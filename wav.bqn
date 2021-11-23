@@ -57,7 +57,7 @@ wh ← {
   def ↩ ↕∘≠⊸({⊑‿𝕨⍟(0=≠)𝕩}¨) def
 
   # Turn list of values into namespace
-  makeNS ⇐ •BQN "{"∾(1↓∾"‿"⊸∾¨name)∾"←𝕩}"
+  makeNS ⇐ •BQN "{"∾(1↓∾"‿"⊸∾¨name)∾"⇐𝕩}"
 }
 
 # Return an undoable (⁼) function to convert bytes to PCM data.
@@ -126,7 +126,7 @@ Decode ← {
   hdr ↩ ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdr
   subchunk1Size‿subchunk2Size‿subchunk2ID‿audioFormat‿bitsPerSample‿sampleRate‿numChannels ← wh.MakeNS hdr
   # Handle extensible format
-  "subchunk1Size is invalid" ! 0‿2‿24 ∊˜ se←subchunk1Size-16
+  "subchunk1Size is invalid" ! ⊑ 0‿2‿24 ∊˜ se←subchunk1Size-16
   If (se>0)‿{𝕤
     ! se = 2 + ToInt 2↑subchunk2ID
     ext←@ ⋄ ext‿dat ↩ se (↑ ≍○< ↓) dat
