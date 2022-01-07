@@ -60,6 +60,8 @@ wh ← {
   makeNS ⇐ •BQN "{"∾(1↓∾"‿"⊸∾¨name)∾"⇐𝕩}"
 }
 
+_be_ ← {1(-⊸↓-𝕗×↓)⌊∘÷⟜𝕗⍟(↕1+𝕘)}  # Base expansion
+
 # Return an undoable (⁼) function to convert bytes to PCM data.
 _audioConvert ← {
   audioFormat‿bitsPerSample ← 𝕗
@@ -70,7 +72,7 @@ _audioConvert ← {
   # Convert 𝕗-byte sequences to ints
   _int ← {
     b ← 256
-    (+⟜(b⊸×)˝˜⟜(-(b÷2)≤¯1⊸⊏)·⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘>b|⌊∘÷⟜b⍟(↕𝕗))
+    (+⟜(b⊸×)˝˜⟜(-(b÷2)≤¯1⊸⊏)·⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘> b _be_ 𝕗)
   }
   # Convert int to float
   _float ← {e‿m‿b←𝕗  # exponent and mantissa length in bits; bias
@@ -167,7 +169,7 @@ Encode ← { rate‿fmt‿pcm:
 
   { val ↩ (⊑{𝕎𝕩⊏val}1⊸↓)⌾(𝕩⊸⊑) val }¨ wh.order
 
-  hdr ← ∾ (wh.len×wh.typ='i') 256{@+𝕗|⌊∘÷⟜𝕗⍟(↕𝕨)𝕩}⍟(>⟜0)¨ val
+  hdr ← ∾ (wh.len×wh.typ='i') 256{@+𝕗_be_𝕨 𝕩}⍟(>⟜0)¨ val
   hdr ∾ dat
 }
 
