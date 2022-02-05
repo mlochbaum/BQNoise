@@ -70,9 +70,14 @@ _audioConvert ← {
   l ← bitsPerSample÷8
   _withInv_ ← {F _𝕣_ G: {𝕊:F𝕩 ; 𝕊⁼:G𝕩}}
   # Convert 𝕗-byte sequences to ints
+  bitcast ← •BQN⎊0 "•bit._cast"
   _int ← {
-    b ← 256
-    (+⟜(b⊸×)˝˜⟜(-(b÷2)≤¯1⊸⊏)·⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘> b _be_ 𝕗)
+    0≢bitcast ? ⊑𝕗∊1‿2‿4 ?
+      t ← ⟨8,'c'⟩‿⟨8×𝕗,'i'⟩
+      (t _bitcast) _withInv_ ((⌽t)_bitcast)
+    ;
+      b ← 256
+      (+⟜(b⊸×)˝˜⟜(-(b÷2)≤¯1⊸⊏)·⍉⌊‿𝕗⥊⊢) _withInv_ (⥊∘⍉∘> b _be_ 𝕗) -⟜@
   }
   # Convert int to float
   _float ← {e‿m‿b←𝕗  # exponent and mantissa length in bits; bias
@@ -92,10 +97,10 @@ _audioConvert ← {
   # Look up the appropriate function
   {
   1:
-    l _int -⟜@ ;
+    l _int ;
   3:
     "Float formats other than 32-bit are not supported" ! 4=l
-    8‿23‿127 _float ·4 _int -⟜@ ;
+    8‿23‿127 _float 4 _int ;
   𝕩:
     0 !˜ "Unsupported audio format: " ∾ •Repr audioFormat
   }audioFormat
