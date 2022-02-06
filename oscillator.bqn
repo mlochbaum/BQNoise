@@ -27,7 +27,7 @@ White ⇐ Rand ≢                # White noise
 Brown ⇐ +` White              # Brown noise
 # Pink noise
 #Pink  ⇐ ÷⟜(⌈´|) (2⊸/⊸+˜´∘⌽ · Rand¨ 2⋆↕)⊸÷∘(1+·⌈2⋆⁼⊢)⊸(↑˜)∘≠
-Pink  ⇐ ÷⟜(⌈´|) (+` ·⥊∘⍉∘≍´ ·-⟜«∘Rand¨ 2⋆1⌈⌽∘↕)∘(1+·⌈2⋆⁼⊢)⊸(↑˜)∘≠
+Pink  ⇐ {÷⟜(⌈´|) +` 𝕩 ↑ ⥊∘⍉∘≍´⌽ -⟜«∘Rand¨ (1⌈↕∘⌈)⌾(2⋆⁼⊢)2⌈𝕩}∘≠
 
 # Karplus-Stong algorithm for a plucked string
 Pluck ⇐ { 𝕊 f‿len‿att: # Frequency, length, attenuation
