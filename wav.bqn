@@ -83,7 +83,7 @@ _audioConvert ← {
     maxval←(1-2⋆-m+1)×2⋆(2⋆e)-b+1
     {
       𝕩 ×↩ 2⋆-m
-      p‿s ← (2⋆e) (| ≍○< ⌊∘÷˜) ⌊𝕩
+      p‿s ← (2⋆e) (| ⋈ ⌊∘÷˜) ⌊𝕩
       p +↩ ¬n←0<p
       (¯1⋆s)×(2⋆p-b) × n+1|𝕩
     }_withInv_{
@@ -126,7 +126,7 @@ Decode ← {
   # Integer from little-endian unsigned bytes
   ToInt ← 256⊸×⊸+˜´ -⟜@
 
-  hdr‿dat ← wh.len +´⊸(↑ ≍○< ↓) 𝕩
+  hdr‿dat ← wh.len +´⊸(↑⋈↓) 𝕩
 
   # Assign field values to field names.
   hdr ↩ ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdr
@@ -135,7 +135,7 @@ Decode ← {
   "subchunk1Size is invalid" ! ⊑ 0‿2‿24 ∊˜ se←subchunk1Size-16
   If (se>0)‿{𝕤
     ! se = 2 + ToInt 2↑subchunk2ID
-    ext←@ ⋄ ext‿dat ↩ se (↑ ≍○< ↓) dat
+    ext←@ ⋄ ext‿dat ↩ se (↑⋈↓) dat
     If (se>2)‿{𝕤
       If (audioFormat = 65534)‿{𝕤⋄ audioFormat ↩ ToInt 4↑ext }
     }
@@ -143,7 +143,7 @@ Decode ← {
   # Ignore remaining subchunks
   s ← subchunk2Size
   While {𝕤⋄"data"≢subchunk2ID}‿{𝕤
-    subchunk2ID‿s‿dat ↩ (4⊸↑ ≍○< ToInt∘((4+↕4)⊸⊏) ≍○< 8⊸↓) s ↓ dat
+    subchunk2ID‿s‿dat ↩ (4⊸↑ ⋈ ToInt∘((4+↕4)⊸⊏) ⋈ 8⊸↓) s ↓ dat
     subchunk2Size +↩ s+8
   }
   # Check that fields match their definitions

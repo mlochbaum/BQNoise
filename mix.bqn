@@ -8,7 +8,7 @@ I ⇐ <⟜0 ⌽∘⊢⍟⊣ ↕⊸÷∘|
 
 # Add two signals 𝕨 and 𝕩 or a list of signals 𝕩,
 # extending to the length of the longest signal.
-Add ⇐ +´ ·(⌈´(¯1⊑≢)¨)⊸(↑⎉1¨) ⊢⊘(≍○<)
+Add ⇐ +´ ·(⌈´(¯1⊑≢)¨)⊸(↑⎉1¨) ⊢⊘⋈
 # Like add, but concatenate instead (no extension).
 Concat ⇐ (∾ (0⥊˜·⌈´=¨)⊸(<∘⊣↓¨↓)) ⊘ (∾⎉1)
 # Like ⌽⎉1, but the end of the signal does not wrap around.
@@ -38,7 +38,7 @@ Fadefront‿Fadeback ⇐ {𝕊f: {𝕨⊸×⌾((F≠𝕨)↑⊢)𝕩}⎉1 }¨ �
 
 # 𝕗 is the overlap amount. Fade 𝕨 into 𝕩, linearly.
 _crossfade ⇐ {
-  G←↑≍○<↓
+  G←↑⋈↓
   (-𝕗)⊸G⊸(∾ 1⌽∾˜○(1⊸↓) ∾⟜< (¬⊸≍I𝕗)+˝∘×≍○⊑)⟜(𝕗⊸G)⎉1
 }
 
@@ -57,6 +57,6 @@ Reverb ⇐ {
   k0← ⌈⌾(÷⟜l) k     # Rounded up
   𝕨 {
     CW ← ⊏ · (FFT n↑𝕨)⊸M⌾FFT n⊸↑
-    {t←0 ⋄ k↑⥊ {r‿s←(-o)(t⊸+⌾(o⊸↑)∘↓≍○<↑)CW𝕩⋄t↩s⋄r}˘ ∘‿l⥊k0↑𝕩}⎉1 𝕩
+    {t←0 ⋄ k↑⥊ {r‿s←(-o)(t⊸+⌾(o⊸↑)∘↓⋈↑)CW𝕩⋄t↩s⋄r}˘ ∘‿l⥊k0↑𝕩}⎉1 𝕩
   }⎉(1≍1+0⌈-˜○=) 𝕩
 }
