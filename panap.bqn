@@ -123,11 +123,11 @@ Get_panap_coeff ← { 𝕊 n‿rr‿f:
 # ---------------------------------------------------------
 " # Derivation
 # Transfer function for an all-pass filter: argument is z,
-# and rs and re are (×˜∘|) and (9&o.) of the complex parameter
-H   = (1 + (rs××˜) - 2×re&×) ÷ (×˜ + rs - 2×re&×)
+# and rs and re are (×˜|) and (2÷˜+⟜+) of the complex parameter
+H   = (1 + (rs××˜) - 2×re⊸×) ÷ (×˜ + rs - 2×re⊸×)
 # Derivative with respect to z
-Hp  = (2 × (re-˜rs&×) - H×(1-re)) ÷ (×˜+rs-2×re&×)
-    = (2 × (× rs-H) - re×1-˜H) ÷ (×˜+rs-2×re&×)
+Hp  = (2 × (re-˜rs⊸×) - H×(1-re)) ÷ (×˜+rs-2×re⊸×)
+    = (2 × (× rs-H) - re×1-˜H) ÷ (×˜+rs-2×re⊸×)
 
 # Definition of the phase transfer function T
 (⋆⍳T ω) = (H ⋆⍳ω)
