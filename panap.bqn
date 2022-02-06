@@ -1,7 +1,7 @@
 # Stereo panning
 
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
-mix‿fil ← •Import¨ "mix.bqn"‿"filter.bqn"
+mix‿fil ← o •Import¨ "mix.bqn"‿"filter.bqn"
 ⟨Cos⟩ ← •math
 
 # The goal of stereo panning is to make sounds appear to come from

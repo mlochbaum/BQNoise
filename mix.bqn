@@ -1,6 +1,6 @@
 "mix.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
-fft ← •Import "fft.bqn"
+fft ← o •Import "fft.bqn"
 
 # List of length |𝕩 that starts at 0 and stops just before 1,
 # reversed if 𝕩<0.
