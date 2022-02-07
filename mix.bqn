@@ -60,3 +60,9 @@ Reverb ⇐ {
     {t←0 ⋄ k↑⥊ {r‿s←(-o)(t⊸+⌾(o⊸↑)∘↓⋈↑)CW𝕩⋄t↩s⋄r}˘ ∘‿l⥊k0↑𝕩}⎉1 𝕩
   }⎉(1≍1+0⌈-˜○=) 𝕩
 }
+# Apply stereo reverb by keeping early IR sides separate and later
+# blending them together; can avoid some balance issues
+ReverbStereoMix ⇐ {
+  ir ← (I 100) ((¬∘⊣×≠⊸↑)⎉1 ⋈ Fadefront) 𝕨
+  Add ir Reverb¨ ⋈⟜(+˝÷≠) 𝕩
+}
