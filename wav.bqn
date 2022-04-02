@@ -35,7 +35,7 @@ wh ← {
   #   def:  How to compute value
   len‿typ‿err‿name‿def ⇐ <˘⍉>⟨
     4‿'c'‿'e'‿"chunkID"      ‿⟨"RIFF"⟩
-    4‿'i'‿'w'‿"chunkSize"    ‿⟨20++´,"subchunk1Size","subchunk2Size"⟩
+    4‿'i'‿'.'‿"chunkSize"    ‿⟨20++´,"subchunk1Size","subchunk2Size"⟩
     4‿'c'‿'e'‿"format"       ‿⟨"WAVE"⟩
     4‿'c'‿'e'‿"subchunk1ID"  ‿⟨"fmt "⟩
     4‿'i'‿'?'‿"subchunk1Size"‿⟨16⟩
@@ -143,7 +143,7 @@ Decode ← {
   # Ignore remaining subchunks
   s ← subchunk2Size
   While {𝕤⋄"data"≢subchunk2ID}‿{𝕤
-    subchunk2ID‿s‿dat ↩ (4⊸↑ ⋈ ToInt∘((4+↕4)⊸⊏) ⋈ 8⊸↓) s ↓ dat
+    subchunk2ID‿s‿dat ↩ (4⊸↑ <⊸∾ ToInt∘((4+↕4)⊸⊏) ⋈ 8⊸↓) s ↓ dat
     subchunk2Size +↩ s+8
   }
   # Check that fields match their definitions
