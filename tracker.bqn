@@ -34,7 +34,7 @@ opt0 ← Opts{⇐}
 
 MakeTrack ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 pattern‿sample‿post:
   _sum ← { o.empty 𝔽⊸Add´ 𝕩 }  # Avoid extra memory use
-  sp ← pattern ⋈¨ sample
+  sp ← (<˘⍟(1<=)pattern) ⋈¨ sample
   { (post⊑˜⊑𝕩)o.ApplyPost (o Sequence ⊑⟜sp)_sum 𝕩 } _sum ⊔⊐post
 }
 
@@ -71,7 +71,7 @@ Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 pattern‿GetSamples:
   b‿c‿a ← o.beat ParseBeats pattern
 
   # Compute lengths
-  b +↩ (⥊⟜(o.swing-1) + (o.pink÷100){(𝕗×PinkDiff)⍟(0≠𝕗)})∘≠⊸× a
+  b +↩ (⥊⟜(o.swing-1) + (o.pink÷100){(0≠𝕗)◶⟨0,𝕗×PinkDiff⟩})∘≠⊸× a
   ge ← (m∾0) (¬⊸×-⊣) g ← +`0∾˜ m ← ¬ c∊o.control
   sh ← +´¨ ge ⊔ 0∾˜b × o.GetShift c
   len ← ⌊0.5+ (-⟜»sh) + +´¨ g ⊔ b∾o.end×¯1⊏b
