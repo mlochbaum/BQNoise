@@ -56,6 +56,10 @@ Filter ← {
       r
     }¨ 𝕩
 }⎉1
+{𝕤
+  fi ← "lib.so" (•BQN"•FFI"){𝔽} "&"‿"filter"∾∾("u64"⋈∾⟜"f64")¨"&**"
+  Filter ↩ Fi∘{ ∾≠⊸⋈¨ ⟨𝕩⟩∾𝕨 }⎉1
+}⎊⊢@
 _f ← { !∘0⊘(𝔽⊸Filter) }
 
 # Compute the frequency response from coefficients
