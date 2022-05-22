@@ -13,4 +13,4 @@ RandFloats ⇐ (•BQN⎊(•rand˙) "•MakeRand 1").Range⟜0
 warn_dither ⇐ 0  # Whether to warn on non-integer signal
 warn_clip   ⇐ 1  # Whether to warn on out-of-bounds signal
 Dither ⇐ ⌊ (-˝ ·RandFloats 2∾≢)⊸+
-Resample ⇐ "No resampling function specified"!0˙
+Resample ⇐ { 𝕨 (resample ↩ •Import "soxresample.bqn"){𝔽} 𝕩 }
