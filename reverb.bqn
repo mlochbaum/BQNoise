@@ -5,9 +5,10 @@ Reverb ← {
   ! 0<lw
   # Use the overlap-add method.
   o ← lw-1          # Overlap length
-  n ← ⌈⌾(2⋆⁼⊢) 3×o  # Window length, including overlap
-  l ← n-o           # Without overlap
   k ← lx+o          # Result length
+  n ← k⌊(2⋆14)⌈3×o  # Window length, including overlap
+  n   ⌈⌾(2⋆⁼⊢)↩     # Round up to power of two
+  l ← n-o           # Without overlap
   k0← ⌈⌾(÷⟜l) k     # Rounded up
   𝕨 {
     CW ← (n↑𝕨) _rev1
