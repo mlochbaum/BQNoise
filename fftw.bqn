@@ -1,4 +1,4 @@
-# FFTW-based replacement for fft.bqn
+# FFTW-based replacement for fft.bqn (unused; see reverb.bqn)
 
 plan ← "*:i32"
 

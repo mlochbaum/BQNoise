@@ -1,6 +1,5 @@
 "mix.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
 o ← ≠◶⟨•Import∘"options.bqn", ⊑⟩ •args
-fft ← o •Import "fft.bqn"
 
 # List of length |𝕩 that starts at 0 and stops just before 1,
 # reversed if 𝕩<0.
@@ -45,21 +44,8 @@ _crossfade ⇐ {
 # Apply reverb impulse response (IR) 𝕨 to 𝕩.
 # Argument rows are extended, giving result length (𝕩+○≠𝕨)-1 (for lists).
 # Equivalent to (+´¨+⌜○↕○≠⊔×⌜)⎉1 except for numeric precision.
-Reverb ⇐ {
-  M ← -˝∘× ≍ +˝∘×⟜⌽ # Complex multiplication
-  lw‿lx ← (¯1⊑≢)¨ 𝕨‿𝕩
-  ! 0<lw
-  # Use the overlap-add method.
-  o ← lw-1          # Overlap length
-  n ← ⌈⌾(2⋆⁼⊢) 3×o  # Window length, including overlap
-  l ← n-o           # Without overlap
-  k ← lx+o          # Result length
-  k0← ⌈⌾(÷⟜l) k     # Rounded up
-  𝕨 {
-    CW ← ⊏ · (FFT n↑𝕨)⊸M⌾FFT n⊸↑
-    {t←0 ⋄ k↑⥊ {r‿s←(-o)(t⊸+⌾(o⊸↑)∘↓⋈↑)CW𝕩⋄t↩s⋄r}˘ ∘‿l⥊k0↑𝕩}⎉1 𝕩
-  }⎉(1≍1+0⌈-˜○=) 𝕩
-}
+reverb ⇐ •Import "reverb.bqn"
+
 # Apply stereo reverb by keeping early IR sides separate and later
 # blending them together; can avoid some balance issues
 ReverbStereoMix ⇐ {
