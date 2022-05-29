@@ -21,7 +21,7 @@ rev1 ← {𝕊
   # Use the half-complex form of FFTW
   # Converts e.g. 8 reals to r0,r1,r2,r3,r4,i3,i2,i1 and back
   pl ← ">" ∾ plan ← "*:i32"
-  Fn ← "/usr/lib/libfftw3.so.3"⊸•FFI
+  Fn ← "/usr/lib/libfftw3.so.3"⊸(•BQN"•FFI")
   createPlan  ← Fn plan‿"fftw_plan_r2r_1d"‿"i32"‿"*f64"‿"&f64"‿"i32"‿"i32"
   destroyPlan ← Fn ""‿"fftw_destroy_plan"‿pl
   executePlan ← Fn ""‿"fftw_execute"‿pl
