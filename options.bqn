@@ -1,4 +1,4 @@
-FBytes ⇐ •FBytes
+fBytes ⇐ •BQN"•FBytes"
 fmt  ⇐ 1‿16      # Format: 16-bit integer
 freq ⇐ 44100     # Frequency: 44.1kHz
 Set ⇐ {fmt‿freq↩𝕩}
