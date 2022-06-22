@@ -5,7 +5,7 @@
   MakeTrack    # Build entire track
   Sequence     # Build a single instrument
   ReadPattern  # Read pattern for a track from lf-separated string
-  GetLength    # Find length of pattern
+  SkipLength   # Find length of pattern
 ⟩⇐
 
 "tracker.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
@@ -20,6 +20,7 @@ Opts ← {
   control ⇐ noop∾shifts∾○⊏gains # Non-sample characters
   GetShift‿GetVol ⇐ 0‿1 {{𝕩⊏˜𝕨⊸⊐}⟜(∾⟜𝕨)˝𝕩}¨ shifts‿gains
 
+  SetBeat ⇐ {beat↩𝕩}
   beat  ⇐ {𝕩.beat} ⎊(!˙) 𝕩 # Starting samples/beat (optional with :BEAT:)
   empty ⇐ {𝕩.empty}⎊(2‿0⥊0) 𝕩
   swing ⇐ {𝕩.swing}⎊⟨1⟩ 𝕩  # Modifier for length of each beat
@@ -61,10 +62,10 @@ ParseBeats ← {
   g ← (⊑1↑s) (𝕨!∘m⊘⋈⊢)⊸∾⍟(0<≠∘⊣) Getb¨⌾(⊏⍉) ⌊‿2⥊1↓s
   <∘∾˘ ⍉ (≠∘⊢ ⥊¨ ⋈∾Avgb∘⊣)´˘ g
 }
-GetLength ← { ⌊ +´ ⊑ 𝕨 ParseBeats ⊏𝕩 }
-GetLastBeat ← {
-  ¬⊑':'∊𝕩 ? 𝕨.beat ;
-  Avgb Getb 1↓ (1-˜⊢´)⊸=∘(+`':'⊸=)⊸/ 𝕩
+SkipLength ← (0<≠∘⊢)◶0‿{
+  len ← ⌊0.5 +´ ⊑ ({𝕩.beat}⎊⊢𝕨) ParseBeats b←⊏𝕩
+  {⟨S⇐SetBeat⟩: ⊑':'∊b ? S Avgb Getb 1↓ (1-˜⊢´)⊸=∘(+`':'⊸=)⊸/ b ; @ } 𝕨
+  len
 }
 
 Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o𝕊p‿s:o𝕊𝕩∾0 ; o 𝕊 pattern‿GetSamples‿overlap:
