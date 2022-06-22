@@ -24,18 +24,19 @@ Opts ← {
   empty ⇐ {𝕩.empty}⎊(2‿0⥊0) 𝕩
   swing ⇐ {𝕩.swing}⎊⟨1⟩ 𝕩  # Modifier for length of each beat
   pink  ⇐ {𝕩.pink} ⎊2   𝕩  # Level of pink noise "humanization"
-  end   ⇐ {𝕩.end} ⎊0   𝕩   # Number of additional beats at the end
-
-  useOverlap ⇐ {𝕩.UseOverlap}⎊(1˙) 𝕩    # Whether sample function 𝕩 should overlap
-  applyPost  ⇐ {𝕩.ApplyPost }⎊({𝕎𝕩}˙) 𝕩 # Apply post-processing thing 𝕨
-  {𝕊:UseOverlap↩0˙⋄ApplyPost↩⊢}⍟{1≡𝕩.fast}⎊@ 𝕩 # fast←1 to take shortcuts
+  end   ⇐ {𝕩.end}  ⎊0   𝕩  # Number of additional beats at the end
 }
 opt0 ← Opts{⇐}
 
-MakeTrack ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 pattern‿sample‿post:
-  _sum ← { o.empty 𝔽⊸Add´ 𝕩 }  # Avoid extra memory use
-  sp ← (<˘⍟(1<=)pattern) ⋈¨ sample
-  { (post⊑˜⊑𝕩)o.ApplyPost (o Sequence ⊑⟜sp)_sum 𝕩 } _sum ⊔⊐post
+# Build a multi-track pattern
+MakeTrack ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 𝕩:
+  pattern‿sample ← 𝕩 ⋄ pattern<˘⍟(1<=)↩   # Template, and sample function
+  overlap   ← {⟨v⇐overlap⟩:v;0¨ pattern}𝕩 # Whether adjacent samples overlap
+  post      ← {⟨v⇐post   ⟩:v;⊢˙¨pattern}𝕩 # Post-processing for each channel
+  postgroup ← {⟨v⇐postgroup⟩:v; ↕≠post}𝕩  # Group equal values: add before post-processing
+  pso ← ⍉[pattern,sample,overlap]
+  _sum ← { 𝔽_𝕣⟨x⟩: 𝔽x ; o.empty 𝔽⊸Add´ 𝕩 }
+  { (post⊑˜⊑𝕩){𝕎𝕩} (o Sequence ⊏⟜pso)_sum 𝕩 } _sum ⊔postgroup
 }
 
 # String handling
@@ -66,7 +67,7 @@ GetLastBeat ← {
   Avgb Getb 1↓ (1-˜⊢´)⊸=∘(+`':'⊸=)⊸/ 𝕩
 }
 
-Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 pattern‿GetSamples:
+Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o𝕊p‿s:o𝕊𝕩∾0 ; o 𝕊 pattern‿GetSamples‿overlap:
   # Beat length, character, average length
   b‿c‿a ← o.beat ParseBeats pattern
 
@@ -81,7 +82,7 @@ Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 pattern‿GetSamples:
   d ← ⟨o.empty⟩ ∾ vol × GetSamples m/c
 
   # Construct output from samples and lengths
-  { o.UseOverlap getSamples ?
+  { overlap ?
     L‿H ← Lp2‿Hp2 {𝕩⊸𝕎⍟2}¨ 1000
     Overlap ← {
       tail ← o.empty
