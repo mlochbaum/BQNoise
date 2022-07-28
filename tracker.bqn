@@ -1,11 +1,11 @@
 # Sequencer/tracker based on a string pattern
 
 ⟨
-  Opts         # Make options object
+  SetOpts      # Set global options
   MakeTrack    # Build entire track
   Sequence     # Build a single instrument
+  AdvanceState # Advance state object 𝕩 past pattern 𝕨
   ReadPattern  # Read pattern for a track from lf-separated string
-  SkipLength   # Find length of pattern
 ⟩⇐
 
 "tracker.bqn takes a single option namespace, or no arguments" ! 1≥≠•args
@@ -20,24 +20,26 @@ Opts ← {
   control ⇐ noop∾shifts∾○⊏gains # Non-sample characters
   GetShift‿GetVol ⇐ 0‿1 {{𝕩⊏˜𝕨⊸⊐}⟜(∾⟜𝕨)˝𝕩}¨ shifts‿gains
 
-  SetBeat ⇐ {beat↩𝕩}
   beat  ⇐ {𝕩.beat} ⎊(!˙) 𝕩 # Starting samples/beat (optional with :BEAT:)
-  empty ⇐ {𝕩.empty}⎊(2‿0⥊0) 𝕩
   swing ⇐ {𝕩.swing}⎊⟨1⟩ 𝕩  # Modifier for length of each beat
+
+  empty ⇐ {𝕩.empty}⎊(2‿0⥊0) 𝕩
   pink  ⇐ {𝕩.pink} ⎊2   𝕩  # Level of pink noise "humanization"
   end   ⇐ {𝕩.end}  ⎊0   𝕩  # Number of additional beats at the end
 }
-opt0 ← Opts{⇐}
+o ← Opts{⇐}
+SetOpts ⇐ { o ↩ Opts 𝕩 }
 
 # Build a multi-track pattern
-MakeTrack ← { 𝕊𝕩:opt0𝕊𝕩 ; o 𝕊 𝕩:
+MakeTrack ← { 𝕊𝕩:
   pattern‿sample ← 𝕩 ⋄ pattern<˘⍟(1<=)↩   # Template, and sample function
+  state     ← pattern⊢¨{⟨v⇐state⟩:v;{⇐}}𝕩 # Starting state for each track
   overlap   ← {⟨v⇐overlap⟩:v;0¨ pattern}𝕩 # Whether adjacent samples overlap
   post      ← {⟨v⇐post   ⟩:v;⊢˙¨pattern}𝕩 # Post-processing for each channel
   postgroup ← {⟨v⇐postgroup⟩:v; ↕≠post}𝕩  # Group equal values: add before post-processing
-  pso ← ⍉[pattern,sample,overlap]
+  arg ← ⍉[pattern,sample,state,overlap]
   _sum ← { 𝔽_𝕣⟨x⟩: 𝔽x ; o.empty 𝔽⊸Add´ 𝕩 }
-  { (post⊑˜⊑𝕩){𝕎𝕩} (o Sequence ⊏⟜pso)_sum 𝕩 } _sum ⊔postgroup
+  { (post⊑˜⊑𝕩){𝕎𝕩} (Sequence ⊏⟜arg)_sum 𝕩 } _sum ⊔postgroup
 }
 
 # String handling
@@ -59,18 +61,17 @@ PinkDiff ← {𝕩 ↑ ⥊∘⍉∘≍´⌽ -⟜«∘Rand¨ (1⌈↕∘⌈)⌾(2
 ParseBeats ← {
   m ← "Initial beat length unknown"
   s ← ':' Cut ' '⊸≠⊸/ 𝕩
-  g ← (⊑1↑s) (𝕨!∘m⊘⋈⊢)⊸∾⍟(0<≠∘⊣) Getb¨⌾(⊏⍉) ⌊‿2⥊1↓s
+  g ← (⊑1↑s) {𝕩.beat}∘𝕨⊸⋈⊸∾⍟(0<≠∘⊣) Getb¨⌾(⊏⍉) ⌊‿2⥊1↓s
   <∘∾˘ ⍉ (≠∘⊢ ⥊¨ ⋈∾Avgb∘⊣)´˘ g
 }
-SkipLength ← (0<≠∘⊢)◶0‿{
-  len ← ⌊0.5 +´ ⊑ ({𝕩.beat}⎊⊢𝕨) ParseBeats b←⊏𝕩
-  {⟨S⇐SetBeat⟩: ⊑':'∊b ? S Avgb Getb 1↓ (1-˜⊢´)⊸=∘(+`':'⊸=)⊸/ b ; @ } 𝕨
-  len
+AdvanceState ← { b 𝕊 st:
+  offset ⇐ ({𝕩.offset}⎊0𝕨) + ⌊0.5 +´ ⊑ st ParseBeats b
+  beat ⇐ {⊑':'∊b ? Avgb Getb 1↓ (1-˜⊢´)⊸=∘(+`':'⊸=)⊸/ b ; st.beat}
 }
 
-Sequence ← { 𝕊𝕩:opt0𝕊𝕩 ; o𝕊p‿s:o𝕊𝕩∾0 ; o 𝕊 pattern‿GetSamples‿overlap:
+Sequence ← { 𝕊p‿s‿t:𝕊𝕩∾0 ; 𝕊 pattern‿GetSamples‿state‿overlap:
   # Beat length, character, average length
-  b‿c‿a ← o.beat ParseBeats pattern
+  b‿c‿a ← state ParseBeats pattern
 
   # Compute lengths
   b +↩ (⥊⟜(o.swing-1) + (o.pink÷100){(0≠𝕗)◶⟨0,𝕗×PinkDiff⟩})∘≠⊸× a
