@@ -32,5 +32,5 @@ Pink  ⇐ {÷⟜(⌈´|) +` 𝕩 ↑ ⥊∘⍉∘≍´⌽ -⟜«∘Rand¨ (1⌈�
 # Karplus-Stong algorithm for a plucked string
 Pluck ⇐ { 𝕊 f‿len‿att: # Frequency, length, attenuation
   p ← ⌊o.freq÷f
-  ∾ ((÷2×16⋆att÷p)×1⊸⌽⊸+)⍟(↕⌈len÷p) Pink p⥊0
+  len ↑ ∾ ((÷2×16⋆att÷p)×1⊸⌽⊸+)⍟(↕⌈len÷p) Pink p⥊0
 }
