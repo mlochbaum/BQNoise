@@ -13,4 +13,4 @@ Note ⇐ (minor⊑˜'a'(⊢-≤◶'A'‿⊣)⊑) (+´⟜(-˝"#b"=⌜⊢) Trans 4
 
 # Nearest note from frequency
 names ← ('A'⊸+ ∾⟜(/⟜"#")¨ ⊒) /12⊸«⊸-minor
-FromFreq ⇐ 12 ((names⊑˜|) ∾ '4'+⌊∘÷˜) 0.5 ⌊∘+ Trans⟜440⁼
+FromFreq ⇐ 12 ((names⊑˜|) ∾ '4'+⌊∘÷˜) 0.5 ⌊∘+ (440×2 ⋆ ÷⟜12)⁼
