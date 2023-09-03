@@ -4,7 +4,7 @@ u ← "u64"
 soxR ← "/usr/lib/libsoxr.so" •FFI ⟨
   u,"soxr_oneshot","f64","f64","u32"
   "*f32",u,u
-  "&f32",u,"&u64:u32"
+  "&f32",u,"&u64:i32"
   u,u,u
 ⟩
 
