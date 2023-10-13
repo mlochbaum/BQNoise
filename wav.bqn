@@ -126,25 +126,25 @@ Decode ← {
   # Integer from little-endian unsigned bytes
   ToInt ← 256⊸×⊸+˜´ -⟜@
 
-  hdr‿dat ← wh.len +´⊸(↑⋈↓) 𝕩
+  hdrt‿dat ← wh.len +´⊸(↑⋈↓) 𝕩
 
   # Assign field values to field names.
-  hdr ↩ ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdr
+  hdr ← ('i'=wh.typ) ToInt∘⊢⍟⊣¨ wh.len /⊸⊔ hdrt
   subchunk1Size‿subchunk2Size‿subchunk2ID‿audioFormat‿bitsPerSample‿sampleRate‿numChannels ← wh.MakeNS hdr
   # Handle extensible format
   "subchunk1Size is invalid" ! ⊑ 0‿2‿24 ∊˜ se←subchunk1Size-16
+  ScHdr ← 4 (↑ ⋈ ToInt∘↓) ⊢  # Parse a new subchunk header
   If (se>0)‿{𝕤
     ! se = 2 + ToInt 2↑subchunk2ID
     ext←@ ⋄ ext‿dat ↩ se (↑⋈↓) dat
+    subchunk2ID‿subchunk2Size ↩ ScHdr ext « ¯8 ↑ hdrt
     If (se>2)‿{𝕤
       If (audioFormat = 65534)‿{𝕤⋄ audioFormat ↩ ToInt 4↑ext }
     }
   }
   # Ignore remaining subchunks
-  s ← subchunk2Size
   While {𝕤⋄"data"≢subchunk2ID}‿{𝕤
-    subchunk2ID‿s‿dat ↩ (4⊸↑ <⊸∾ ToInt∘((4+↕4)⊸⊏) ⋈ 8⊸↓) s ↓ dat
-    subchunk2Size +↩ s+8
+    (subchunk2ID‿subchunk2Size)‿dat ↩ 8 (ScHdr∘↑ ⋈ ↓) subchunk2Size ↓ dat
   }
   # Check that fields match their definitions
   e ← hdr ≢⟜(⊑{𝕎𝕩⊏hdr}1⊸↓)¨ wh.def
@@ -155,7 +155,7 @@ Decode ← {
 
   fmt ← audioFormat‿bitsPerSample
   Cvt ← fmt _audioConvert
-  ⟨sampleRate, fmt, ⍉ ⌊‿numChannels ⥊ Cvt⎊(⊣⊘Cvt subchunk2Size⊸↑) dat⟩
+  ⟨sampleRate, fmt, ⍉ ⌊‿numChannels ⥊ Cvt⎊(Cvt subchunk2Size⊸↑) dat⟩
 }
 
 Encode ← { rate‿fmt‿pcm:
