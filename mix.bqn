@@ -24,9 +24,6 @@ Stereo ⇐ ≍˜⍟(2>=)
 # Pan signal 𝕩 to position 𝕨, where 0 is hard left and 1 is hard right
 Pan ⇐ (25⌊∘×≍⟜¬∘⊣) ⥊⟜0⊸»˘ ((=⌜˜↕2)-·(××⌜0⊸⌈)·≍⟜-1-˜2×⊣)⊸(+˝∘×⎉¯1‿∞)⟜Stereo
 
-# Clipping functions clip to [¯1,1] by default
-# _norm changes this to match the format if it's an integer format
-_norm ⇐ { (𝕨𝔽⊢)⌾(÷⟜(2⋆1-˜¯1⊑o.fmt)) 𝕩 }
 # Clip signal 𝕩 to the maximum possible range.
 Clip ⇐ 1⌊¯1⌈⊢
 # 𝕨 is an integer giving "sharpness". Perform a soft clip.

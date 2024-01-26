@@ -62,6 +62,19 @@ wh ← {
 
 _be_ ← {1(-⊸↓-𝕗×↓)⌊∘÷⟜𝕗⍟(↕1+𝕘)}  # Base expansion
 
+# Force 𝕩 to fit in range 𝕗-˜↕2×𝕗, warning on clip.
+_fitInt ← { m _𝕣:
+  min‿max ← (-⋈-⟜1) m
+  Ov ← ≤´ (-⊸⋈m)⊸≤
+  # Don't worry about a 1-sample clip, which is common with dither
+  Warn ← { o.warn_clip ? Ov 𝕩-¯1‿1 ?
+    r ← ∾⟜", "⊸∾´•Repr¨⌈⌾(100×-⌾⊑)𝕩
+    •Out "Clipping on write; range is ["∾r∾"] ÷ "∾•Repr m
+  ;@}
+  Clip ← { Warn 𝕨 ⋄ max⌊min⌈𝕩 }
+  ⌊ · (⌊´⋈⌈´)∘⥊⊸(Clip⍟(Ov⊣)) o.Dither
+}
+
 # Return an undoable (⁼) function to convert bytes to PCM data.
 _audioConvert ← {
   audioFormat‿bitsPerSample ← 𝕗
@@ -96,28 +109,14 @@ _audioConvert ← {
   # Look up the appropriate function
   {
   1:
-    l _int ;
+    m ← 2⋆bitsPerSample-1
+    (m ÷˜ 0.5⊸+ _withInv_ (m _fitInt)) l _int ;
   3:
     "Float formats other than 32-bit are not supported" ! 4=l
     8‿23‿127 _float 4 _int ;
   𝕩:
     0 !˜ "Unsupported audio format: " ∾ •Repr audioFormat
   }audioFormat
-}
-
-# 𝕨 is audioFormat‿bitsPerSample.
-# Force 𝕩 to fit in format 𝕨, emitting approprate warnings.
-ForceFormat ← { f‿b 𝕊 pcm:
-  Dither ← {
-    •Out⍟o.warn_dither "Signal is non-integral; dithering..."
-    o.Dither 𝕩
-  }
-  Clip ← {
-    •Out⍟o.warn_clip "Signal out of bounds; clipping..."
-    max ⌊ min ⌈ 𝕩
-  }
-  min‿max ← (-≍-⟜1) 2⋆b-1
-  (Clip⍟(min⊸> ∨○(∨´⥊) >⟜max) Dither∘⊣⍟≢⟜⌊)⍟(f=1) pcm
 }
 
 Decode ← {
@@ -161,7 +160,7 @@ Decode ← {
 Encode ← { rate‿fmt‿pcm:
   ! 2 ≥ =pcm
   pcm ⥊⟜0⊸↓˜↩ 2
-  dat ← fmt _audioConvert⁼ fmt ForceFormat ⥊⍉pcm
+  dat ← fmt _audioConvert⁼ ⥊⍉pcm
   iname‿ival ← <˘⍉∘‿2⥊⟨
     "sampleRate"   , rate
     "numChannels"  , ≠pcm
