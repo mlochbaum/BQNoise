@@ -181,7 +181,7 @@ Read  ← { ¯1⊸⊑⍟(⟨o.freq,o.fmt⟩ ≡ 2⊸↑) ReadFull 𝕩 }
 Write ← { 𝕩 o.FBytes Encode(⟨o.freq,o.fmt⟩∾<)⍟(1≥≡) 𝕨 }
 
 # Read, setting o.freq and o.fmt as a side effect.
-Read_set ← { t←ReadFull 𝕩 ⋄ o.Set ¯1↓t ⋄ ¯1⊑t }
+Read_set ← { t←ReadFull 𝕩 ⋄ o.Set ⌽¯1↓t ⋄ ¯1⊑t }
 
 # Read, resampling to fit current frequency, using options.Resample
 Read_coerce ← { ((o.freq∾˜0⊸⊑) o.Resample ¯1⊸⊑) ReadFull 𝕩 }
