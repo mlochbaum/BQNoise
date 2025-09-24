@@ -177,7 +177,7 @@ Encode ← { rate‿fmt‿pcm:
 }
 
 ReadFull ← Decode∘{ o.FBytes 𝕩 }
-Read  ← { ¯1⊸⊑⍟(⟨o.freq,o.fmt⟩ ≡ 2⊸↑) ReadFull 𝕩 }
+Read  ← { ⊢´⍟(o.freq ≡ ⊑) ReadFull 𝕩 }
 Write ← { 𝕩 o.FBytes Encode(⟨o.freq,o.fmt⟩∾<)⍟(1≥≡) 𝕨 }
 
 # Read, setting o.freq and o.fmt as a side effect.
