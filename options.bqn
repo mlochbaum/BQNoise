@@ -12,4 +12,5 @@ RandFloats ⇐ (•BQN⎊(•rand˙) "•MakeRand 1").Range⟜0
 # For reading/writing wave files
 warn_clip ⇐ 1  # Whether to warn on out-of-bounds signal
 Dither ⇐ (-○RandFloats˜ ≢)⊸+⎉1
+SetDither ⇐ {Dither↩𝕏}
 Resample ⇐ { 𝕨 (resample ↩ •Import "soxresample.bqn"){𝔽} 𝕩 }
