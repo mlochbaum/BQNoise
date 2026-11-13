@@ -27,7 +27,8 @@ Pan ⇐ (25⌊∘×≍⟜¬∘⊣) ⥊⟜0⊸»˘ ((=⌜˜↕2)-·(××⌜0⊸�
 # Clip signal 𝕩 to the maximum possible range.
 Clip ⇐ 1⌊¯1⌈⊢
 # 𝕨 is an integer giving "sharpness". Perform a soft clip.
-Softclip ⇐ { ÷⟜(1⊸+⌾(⋆⟜(2⋆𝕨⊣3))) 𝕩 }
+_scs ← { ÷⟜(𝔽⌾(⋆⟜(2⋆𝕨⊣3))) 𝕩 }
+Softclip ⇐ { 𝕊⁼: 𝕨¬_scs𝕩 ; 𝕨1⊸+_scs𝕩 }
 
 # Multiply leading or trailing samples of 𝕩 by 𝕨.
 Fadefront‿Fadeback ⇐ {𝕊f: {𝕨⊸×⌾((F≠𝕨)↑⊢)𝕩}⎉1 }¨ ⊢‿-
